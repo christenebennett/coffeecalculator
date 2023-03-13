@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import './App.css';
 import { CoffeeDataProps } from './coffeeData';
-import Dropdown from './components/atoms/Dropdown';
-import Input from './components/atoms/Input';
+import { Button } from './components/Button';
+import Dropdown from './components/Dropdown';
+import Input from './components/Input';
 
 import './index.css';
 import { ouncesToMl } from './utils/calculations';
@@ -82,12 +83,7 @@ function App() {
             {/* Calculate appears when method and amount has been selected */}
             {readyForCalculation && (
               <div className="p-8">
-                <button
-                  className="border rounded px-2 py-1 hover:bg-indigo-600 hover:text-white"
-                  onClick={handleOnClick}
-                >
-                  Calculate
-                </button>
+                <Button text="Calculate" onClick={handleOnClick} />
               </div>
             )}
           </div>

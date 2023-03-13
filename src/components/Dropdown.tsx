@@ -1,8 +1,9 @@
-import { coffeeData, CoffeeDataProps } from '../../coffeeData';
+import { coffeeData, CoffeeDataProps } from '../coffeeData';
 
 import { Fragment, useEffect, useState } from 'react';
 import { Listbox, Transition } from '@headlessui/react';
 import { CheckIcon, ChevronUpDownIcon } from '@heroicons/react/20/solid';
+import React from 'react';
 
 function classNames(...classes: string[]) {
   return classes.filter(Boolean).join(' ');
