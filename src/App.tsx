@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './App.css';
 import { CoffeeDataProps } from './coffeeData';
 import Dropdown from './components/atoms/Dropdown';
@@ -34,6 +34,18 @@ function App() {
     setView('calculated');
   }
 
+  const [readyForCalculation, setReadyForCalculation] =
+    useState<boolean>(false);
+
+  function isValid() {
+    setReadyForCalculation(
+      selectedBrewMethod.brewMethod.length > 0 && desiredOunces > 0
+    );
+  }
+  useEffect(() => {
+    isValid();
+  }, [selectedBrewMethod, desiredOunces]);
+
   function handleNewCalculation() {
     setSelectedBrewMethod({
       brewMethod: '',
@@ -46,47 +58,68 @@ function App() {
     setView('calculation');
   }
   return (
-    <div className="App">
+    <div className="App p-20">
       <h1 className="text-3xl font-bold underline">Coffee Calculator</h1>
-      <h2 className="text-xl font-medium">
-        quick and easy brewing calculations
-      </h2>
+      <p className="text-xl font-medium">quick and easy brewing calculations</p>
+      <hr className="max-w-xs	mx-auto my-5" />
+
+      {/* View that displays calculation inputs */}
       {view === 'calculation' && (
         <div className="calculation-view">
-          <div className="grid grid-cols-16 md:grid-cols-6">
+          <div className="flex justify-center flex-col max-w-xl m-auto">
             {/* brew selection - dropdown selection */}
-            <div>
+            <div className="p-8">
               <Dropdown setSelectedBrewMethod={setSelectedBrewMethod} />
             </div>
 
             {/* desired coffee amount in ounces  */}
-            {selectedBrewMethod && (
-              <div>
+            {selectedBrewMethod.brewMethod.length > 0 && (
+              <div className="p-8">
                 <Input setDesiredOunces={setDesiredOunces} />
               </div>
             )}
 
             {/* Calculate appears when method and amount has been selected */}
-            <div>
-              <button className="border" onClick={handleOnClick}>
-                Calculate
-              </button>
-            </div>
+            {readyForCalculation && (
+              <div className="p-8">
+                <button
+                  className="border rounded px-2 py-1 hover:bg-indigo-600 hover:text-white"
+                  onClick={handleOnClick}
+                >
+                  Calculate
+                </button>
+              </div>
+            )}
           </div>
         </div>
       )}
+
+      {/* View that displays the final calculation */}
       {view === 'calculated' && (
-        <div className="calculated-view">
-          For {selectedBrewMethod.brewMethod}, you will need:
-          <ul>
-            <li>coffee ground at a {selectedBrewMethod.grind} setting</li>
-            <li>{coffeeAmount} grams of coffee </li>
-            <li>
-              to make {desiredOunces}oz of {selectedBrewMethod.brewMethod}
+        <div className="calculated-view text-left max-w-lg m-auto">
+          <h3 className="pt-5 pb-3">
+            For your {selectedBrewMethod.brewMethod}, you will need:
+          </h3>
+          <ul className="text-left">
+            <li className="py-2">
+              coffee ground at a{' '}
+              <span className="font-bold">{selectedBrewMethod.grind}</span>{' '}
+              setting
+            </li>
+            <li className="py-2">
+              {' '}
+              <span className="font-bold">{coffeeAmount} grams</span> of coffee{' '}
+            </li>
+            <li className="py-2">
+              to make <span className="font-bold">{desiredOunces}oz </span>{' '}
+              using the {selectedBrewMethod.brewMethod} method
             </li>
           </ul>
-          <div>
-            <button className="border" onClick={handleNewCalculation}>
+          <div className="mx-auto text-center">
+            <button
+              className="border rounded px-2 py-1 my-10 hover:bg-indigo-600 hover:text-white "
+              onClick={handleNewCalculation}
+            >
               New Calculation
             </button>
           </div>
